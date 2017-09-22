@@ -2,8 +2,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import AppConstants from './AppConstants';
 
+<<<<<<< HEAD
 class CellExpand extends React.Component {
   static propTypes = {
+=======
+const CellExpand = React.createClass({
+  getInitialState() {
+    let expanded = this.props.expandableOptions && this.props.expandableOptions.expanded;
+    return { expanded: expanded };
+  },
+  componentWillReceiveProps(nextProps) {
+    let expanded = nextProps.expandableOptions && nextProps.expandableOptions.expanded;
+    if (this.state.expanded !== expanded) {
+      this.setState({expanded});
+    }
+  },
+  propTypes: {
+>>>>>>> origin/master
     expandableOptions: PropTypes.object.isRequired,
     onCellExpand: PropTypes.func.isRequired
   };

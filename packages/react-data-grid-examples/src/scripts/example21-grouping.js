@@ -140,6 +140,7 @@ class CustomToolbar extends React.Component {
   }
 }
 
+<<<<<<< HEAD
 class CustomRowGroupRenderer extends React.Component {
   renderColumns = () => {
     return this.props.columns.map(column => {
@@ -166,6 +167,8 @@ class CustomRowGroupRenderer extends React.Component {
     );
   }
 }
+=======
+>>>>>>> origin/master
 
 class Example extends React.Component {
   constructor(props) {
@@ -190,14 +193,24 @@ class Example extends React.Component {
 
   onColumnGroupAdded = (colName) => {
     let columnGroups = this.state.groupBy.slice(0);
-    if (columnGroups.indexOf(colName) === -1) {
-      columnGroups.push(colName);
+    let activeColumn = columns.find((c) => c.key === colName)
+    let isNotInGroups = columnGroups.find((c) => activeColumn.key === c.name) == null;
+    if (isNotInGroups) {
+      columnGroups.push({key: activeColumn.key, name: activeColumn.name});
     }
+   
     this.setState({groupBy: columnGroups});
   };
 
+<<<<<<< HEAD
   onColumnGroupDeleted = (name) => {
     let columnGroups = this.state.groupBy.filter(function(g){return g !== name});
+=======
+  onColumnGroupDeleted(name) {
+    let columnGroups = this.state.groupBy.filter(function(g){
+      return typeof g === 'string' ? g !== name : g.key !== name;
+    });
+>>>>>>> origin/master
     this.setState({groupBy: columnGroups});
   };
 
@@ -222,7 +235,6 @@ class Example extends React.Component {
             toolbar={<CustomToolbar groupBy={this.state.groupBy} onColumnGroupAdded={this.onColumnGroupAdded} onColumnGroupDeleted={this.onColumnGroupDeleted}/>}
             rowHeight={50}
             minHeight={600}
-            rowGroupRenderer={CustomRowGroupRenderer}
             />
       </DraggableContainer>
     );

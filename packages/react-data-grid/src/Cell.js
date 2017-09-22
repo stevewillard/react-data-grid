@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 const React = require('react');
+<<<<<<< HEAD
 const createReactClass = require('create-react-class');
 const ReactDOM = require('react-dom');
+=======
+>>>>>>> origin/master
 const joinClasses = require('classnames');
 const EditorContainer = require('./editors/EditorContainer');
 const ExcelColumn = require('./PropTypeShapes/ExcelColumn');
@@ -57,7 +60,8 @@ const Cell = createReactClass({
 
   getInitialState() {
     return {
-      isCellValueChanging: false
+      isCellValueChanging: false,
+      isLockChanging: false
     };
   },
 
@@ -67,7 +71,8 @@ const Cell = createReactClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      isCellValueChanging: this.props.isCellValueChanging(this.props.value, nextProps.value)
+      isCellValueChanging: this.props.isCellValueChanging(this.props.value, nextProps.value),
+      isLockChanging: this.props.column.locked !== nextProps.column.locked
     });
   },
 
@@ -79,6 +84,9 @@ const Cell = createReactClass({
     }
     if (this.state.isCellValueChanging && this.props.selectedColumn != null) {
       this.applyUpdateClass();
+    }
+    if (this.state.isLockChanging && !this.props.column.locked) {
+      this.removeScroll();
     }
   },
 
@@ -97,7 +105,8 @@ const Cell = createReactClass({
       || this.props.forceUpdate === true
       || this.props.className !== nextProps.className
       || this.props.expandableOptions !== nextProps.expandableOptions
-      || this.hasChangedDependentValues(nextProps);
+      || this.hasChangedDependentValues(nextProps)
+      || this.props.column.locked !== nextProps.column.locked;
     return shouldUpdate;
   },
 
@@ -201,7 +210,8 @@ const Cell = createReactClass({
       'is-dragged-over-down': this.isDraggedOverDownwards(),
       'was-dragged-over': this.wasDraggedOver(),
       'cell-tooltip': this.props.tooltip ? true : false,
-      'rdg-child-cell': this.props.expandableOptions && this.props.expandableOptions.subRowDetails && this.props.expandableOptions.treeDepth > 0
+      'rdg-child-cell': this.props.expandableOptions && this.props.expandableOptions.subRowDetails && this.props.expandableOptions.treeDepth > 0,
+      'last-column': this.props.column.isLastColumn
     });
     return joinClasses(className, extraClasses);
   },
@@ -275,7 +285,7 @@ const Cell = createReactClass({
     let updateCellClass = this.getUpdateCellClass();
     // -> removing the class
     if (updateCellClass != null && updateCellClass !== '') {
-      let cellDOMNode = ReactDOM.findDOMNode(this);
+      let cellDOMNode = this.node;
       if (cellDOMNode.classList) {
         cellDOMNode.classList.remove(updateCellClass);
         // -> and re-adding the class
@@ -289,14 +299,19 @@ const Cell = createReactClass({
   },
 
   setScrollLeft(scrollLeft: number) {
-    let ctrl: any = this; // flow on windows has an outdated react declaration, once that gets updated, we can remove this
-    if (ctrl.isMounted()) {
-      let node = ReactDOM.findDOMNode(this);
-      if (node) {
-        let transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
-        node.style.webkitTransform = transform;
-        node.style.transform = transform;
-      }
+    let node = this.node;
+    if (node) {
+      let transform = `translate3d(${scrollLeft}px, 0px, 0px)`;
+      node.style.webkitTransform = transform;
+      node.style.transform = transform;
+    }
+  },
+
+  removeScroll() {
+    let node = this.node;
+    if (node) {
+      node.style.webkitTransform = null;
+      node.style.transform = null;
     }
   },
 
@@ -380,7 +395,7 @@ const Cell = createReactClass({
       // Meaning focus should not be stolen from elements that the grid doesnt control.
       let dataGridDOMNode = this.props.cellMetaData && this.props.cellMetaData.getDataGridDOMNode ? this.props.cellMetaData.getDataGridDOMNode() : null;
       if (this.isFocusedOnCell() || this.isFocusedOnBody() || (dataGridDOMNode && dataGridDOMNode.contains(document.activeElement))) {
-        let cellDOMNode = ReactDOM.findDOMNode(this);
+        let cellDOMNode = this.node;
         if (cellDOMNode) {
           cellDOMNode.focus();
         }
@@ -474,9 +489,9 @@ const Cell = createReactClass({
     let isDeleteSubRowEnabled = this.props.cellMetaData.onDeleteSubRow ? true : false;
 
     if (treeDepth > 0 && isExpandCell) {
-      cellDeleter = <ChildRowDeleteButton treeDepth={treeDepth} cellHeight={this.props.height} siblingIndex={this.props.expandableOptions.subRowDetails.siblingIndex} numberSiblings={this.props.expandableOptions.subRowDetails.numberSiblings} onDeleteSubRow={this.onDeleteSubRow} isDeleteSubRowEnabled={isDeleteSubRowEnabled}/>;
+      cellDeleter = <ChildRowDeleteButton treeDepth={treeDepth} cellHeight={this.props.height} siblingIndex={this.props.expandableOptions.subRowDetails.siblingIndex} numberSiblings={this.props.expandableOptions.subRowDetails.numberSiblings} onDeleteSubRow={this.onDeleteSubRow} isDeleteSubRowEnabled={isDeleteSubRowEnabled} />;
     }
-    return (<div className="react-grid-Cell__value">{cellDeleter}<div  style={{ marginLeft: marginLeft }}><span>{CellContent}</span> {this.props.cellControls} {cellExpander}</div></div>);
+    return (<div className="react-grid-Cell__value">{cellDeleter}<div style={{ marginLeft: marginLeft }}><span>{CellContent}</span> {this.props.cellControls} {cellExpander}</div></div>);
   },
 
   render() {
@@ -501,7 +516,7 @@ const Cell = createReactClass({
 
 
     return (
-      <div {...this.getKnownDivProps() } className={className} style={style} {...events}>
+      <div {...this.getKnownDivProps() } className={className} style={style} {...events} ref={(node) => { this.node = node; }}>
         {cellContent}
         {dragHandle}
         {tooltip}

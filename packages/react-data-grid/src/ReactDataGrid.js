@@ -12,6 +12,7 @@ const ColumnMetricsMixin      = require('./ColumnMetricsMixin');
 const RowUtils = require('./RowUtils');
 const ColumnUtils = require('./ColumnUtils');
 const KeyCodes = require('./KeyCodes');
+const isFunction = require('./utils/isFunction');
 import AppConstants from './AppConstants';
 require('../../../themes/react-data-grid-core.css');
 require('../../../themes/react-data-grid-checkbox.css');
@@ -205,7 +206,7 @@ const ReactDataGrid = createReactClass({
     this.onSelect({rowIdx: cell.rowIdx, idx: cell.idx});
 
     if (this.props.onRowClick && typeof this.props.onRowClick === 'function') {
-      this.props.onRowClick(cell.rowIdx, this.props.rowGetter(cell.rowIdx));
+      this.props.onRowClick(cell.rowIdx, this.props.rowGetter(cell.rowIdx), this.getColumn(cell.idx));
     }
   },
 
@@ -813,7 +814,11 @@ const ReactDataGrid = createReactClass({
         showEditor = this.props.onCheckCellIsEditable(args);
       }
       if (showEditor !== false) {
-        this.setState({selected: selected}, this.scrollToColumn(idx));
+        if (column.locked) {
+          this.setState({selected});
+        } else {
+          this.setState({selected}, () => { this.scrollToColumn(idx); });
+        }
         this.handleCancelCopy();
       }
     }
@@ -883,8 +888,11 @@ const ReactDataGrid = createReactClass({
 
   renderToolbar(): ReactElement {
     let Toolbar = this.props.toolbar;
+    let toolBarProps =  {columns: this.props.columns, onToggleFilter: this.onToggleFilter, numberOfRows: this.props.rowsCount};
     if (React.isValidElement(Toolbar)) {
-      return ( React.cloneElement(Toolbar, {columns: this.props.columns, onToggleFilter: this.onToggleFilter, numberOfRows: this.props.rowsCount}));
+      return ( React.cloneElement(Toolbar, toolBarProps));
+    } else if (isFunction(Toolbar)) {
+      return <Toolbar {...toolBarProps}/>;
     }
   },
 

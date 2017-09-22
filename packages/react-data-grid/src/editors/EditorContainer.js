@@ -47,7 +47,7 @@ const EditorContainer = createReactClass({
   },
 
   componentWillUnmount: function() {
-    if (!this.changeCommitted && !this.hasEscapeBeenPressed() && !this.changeCanceled) {
+    if (!this.changeCommitted && !this.changeCanceled) {
       this.commit({key: 'Enter'});
     }
   },
@@ -89,7 +89,7 @@ const EditorContainer = createReactClass({
 
   onPressEscape(e: SyntheticKeyboardEvent) {
     if (!this.editorIsSelectOpen()) {
-      this.props.cellMetaData.onCommitCancel();
+      this.commitCancel();
     } else {
       // prevent event from bubbling if editor has results to select
       e.stopPropagation();
@@ -285,19 +285,6 @@ const EditorContainer = createReactClass({
         inputNode.select();
       }
     }
-  },
-
-  hasEscapeBeenPressed() {
-    let pressed = false;
-    let escapeKey = 27;
-    if (window.event) {
-      if (window.event.keyCode === escapeKey) {
-        pressed = true;
-      } else if (window.event.which === escapeKey) {
-        pressed  = true;
-      }
-    }
-    return pressed;
   },
 
   renderStatusIcon(): ?ReactElement {
