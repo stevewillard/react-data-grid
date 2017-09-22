@@ -1,10 +1,12 @@
 const markdown = require('markdown');
+const PropTypes = require('prop-types');
+const createClass = require('react-create-class');
 
-var DocumentContainer = React.createClass({
+var DocumentContainer = createClass({
   propTypes: {
-    documentContent: React.PropTypes.string.isRequired,
-    documentName: React.PropTypes.string.isRequired,
-    documentPath: React.PropTypes.string.isRequired
+    documentContent: PropTypes.string.isRequired,
+    documentName: PropTypes.string.isRequired,
+    documentPath: PropTypes.string.isRequired
   },
 
   getHtml() {
@@ -24,7 +26,7 @@ var DocumentContainer = React.createClass({
   }
 });
 
-var ComponentDocs = React.createClass({
+var ComponentDocs = createClass({
   getInitialState: function() {
     return { selectedDocumentIndex: 0, documentContent: '' };
   },

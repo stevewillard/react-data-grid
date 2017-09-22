@@ -1,5 +1,6 @@
+const PropTypes = require('prop-types');
 const React                = require('react');
-const PropTypes            = React.PropTypes;
+const createReactClass = require('create-react-class');
 const Header               = require('./Header');
 const Viewport             = require('./Viewport');
 const GridScrollMixin      = require('./GridScrollMixin');
@@ -7,7 +8,9 @@ const DOMMetrics           = require('./DOMMetrics');
 const cellMetaDataShape    = require('./PropTypeShapes/CellMetaDataShape');
 require('../../../themes/react-data-grid-core.css');
 
-const Grid = React.createClass({
+const Grid = createReactClass({
+  displayName: 'Grid',
+
   propTypes: {
     rowGetter: PropTypes.oneOfType([PropTypes.array, PropTypes.func]).isRequired,
     columns: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -20,24 +23,24 @@ const Grid = React.createClass({
     emptyRowsView: PropTypes.func,
     expandedRows: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
     selectedRows: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
-    rowSelection: React.PropTypes.oneOfType([
-      React.PropTypes.shape({
-        indexes: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+    rowSelection: PropTypes.oneOfType([
+      PropTypes.shape({
+        indexes: PropTypes.arrayOf(PropTypes.number).isRequired
       }),
-      React.PropTypes.shape({
-        isSelectedKey: React.PropTypes.string.isRequired
+      PropTypes.shape({
+        isSelectedKey: PropTypes.string.isRequired
       }),
-      React.PropTypes.shape({
-        keys: React.PropTypes.shape({
-          values: React.PropTypes.array.isRequired,
-          rowKey: React.PropTypes.string.isRequired
+      PropTypes.shape({
+        keys: PropTypes.shape({
+          values: PropTypes.array.isRequired,
+          rowKey: PropTypes.string.isRequired
         }).isRequired
       })
     ]),
     rowsCount: PropTypes.number,
     onRows: PropTypes.func,
-    sortColumn: React.PropTypes.string,
-    sortDirection: React.PropTypes.oneOf(['ASC', 'DESC', 'NONE']),
+    sortColumn: PropTypes.string,
+    sortDirection: PropTypes.oneOf(['ASC', 'DESC', 'NONE']),
     rowOffsetHeight: PropTypes.number.isRequired,
     onViewportKeydown: PropTypes.func.isRequired,
     onViewportKeyup: PropTypes.func,
@@ -135,7 +138,7 @@ const Grid = React.createClass({
         }
       </div>
     );
-  }
+  },
 });
 
 module.exports = Grid;

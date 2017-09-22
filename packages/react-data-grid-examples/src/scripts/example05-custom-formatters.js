@@ -1,12 +1,13 @@
 const ReactDataGrid = require('react-data-grid');
 const exampleWrapper = require('../components/exampleWrapper');
+const PropTypes = require('prop-types');
 const React = require('react');
 
 // Custom Formatter component
-const PercentCompleteFormatter = React.createClass({
-  propTypes: {
-    value: React.PropTypes.number.isRequired
-  },
+class PercentCompleteFormatter extends React.Component {
+  static propTypes = {
+    value: PropTypes.number.isRequired
+  };
 
   render() {
     const percentComplete = this.props.value + '%';
@@ -17,10 +18,11 @@ const PercentCompleteFormatter = React.createClass({
         </div>
       </div>);
   }
-});
+}
 
-const Example = React.createClass({
-  getInitialState() {
+class Example extends React.Component {
+  constructor(props, context) {
+    super(props, context);
     this.createRows();
     this._columns = [
       {
@@ -55,14 +57,14 @@ const Example = React.createClass({
       }
     ];
 
-    return null;
-  },
+    this.state = null;
+  }
 
-  getRandomDate(start, end) {
+  getRandomDate = (start, end) => {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
-  },
+  };
 
-  createRows() {
+  createRows = () => {
     let rows = [];
     for (let i = 1; i < 100; i++) {
       rows.push({
@@ -77,11 +79,11 @@ const Example = React.createClass({
     }
 
     this._rows = rows;
-  },
+  };
 
-  rowGetter(i) {
+  rowGetter = (i) => {
     return this._rows[i];
-  },
+  };
 
   render() {
     return  (
@@ -91,7 +93,7 @@ const Example = React.createClass({
         rowsCount={this._rows.length}
         minHeight={500} />);
   }
-});
+}
 
 const exampleDescription = (
   <p>Its possible to create your own formatters for a given column by setting its <code>formatter</code> property. Here a React component is used to format the %complete column. A custom formatter will always receive a <code>value</code> prop, the value of the cell and this can be used however needed. Here we render a progress bar based on the <code>props.value</code></p>);

@@ -1,8 +1,9 @@
+var createClass           = require('react-create-class');
 var ColsDescription       = require('./ColsDescription');
 var RowsDescription       = require('./RowsDescription');
 var RenderGridDescription = require('./RenderGrid');
 
-module.exports = React.createClass({
+module.exports = createClass({
   render : function(){
     return(
       <div>

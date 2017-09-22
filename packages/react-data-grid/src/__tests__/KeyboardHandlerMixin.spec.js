@@ -1,16 +1,19 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import KeyboardHandlerMixin from '../KeyboardHandlerMixin';
 
 
-let TestComponent = React.createClass({
+let TestComponent = createReactClass({
+  displayName: 'TestComponent',
   mixins: [KeyboardHandlerMixin],
+
   render: function() {
     return (
       <div tabIndex="0" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} />
     );
-  }
+  },
 });
 
 describe('KeyboardHandlerMixin', () => {

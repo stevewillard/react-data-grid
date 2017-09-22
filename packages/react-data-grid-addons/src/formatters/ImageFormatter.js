@@ -1,12 +1,16 @@
+const PropTypes = require('prop-types');
 const React = require('react');
+const createReactClass = require('create-react-class');
 require('../../../../themes/react-data-grid-image.css');
 
 let PendingPool = {};
 let ReadyPool = {};
 
-const ImageFormatter = React.createClass({
+const ImageFormatter = createReactClass({
+  displayName: 'ImageFormatter',
+
   propTypes: {
-    value: React.PropTypes.string.isRequired
+    value: PropTypes.string.isRequired
   },
 
   getInitialState() {

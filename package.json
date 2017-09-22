@@ -1,44 +1,44 @@
 {
-  "name": "react-data-grid",
-  "version": "2.0.1",
+  "name": "@curio/react-data-grid",
+  "version": "2.5.7",
   "description": "Data grid for React",
   "main": "src/index.js",
   "scripts": {
     "pretest": "npm run eslint",
-    "test": "./node_modules/.bin/karma start ./config/karma.js --singleRun true --release true",
-    "dev-test": "./node_modules/.bin/karma start ./config/karma.js --singleRun false --debug true",
-    "postinstall": "lerna bootstrap",
+    "test":
+      "./node_modules/.bin/karma start ./config/karma.js --singleRun true --release true",
+    "dev-test":
+      "./node_modules/.bin/karma start ./config/karma.js --singleRun false --debug true",
     "build": "webpack --config ./config/webpack.config.prod.js --release true",
     "dev-server": "node webpack-dev-server.js",
     "beforepublish": "lerna run beforepublish",
-    "eslint": "./node_modules/.bin/eslint -f unix packages/react-data-grid/src/** packages/react-data-grid-addons/src/**"
+    "eslint":
+      "./node_modules/.bin/eslint -f unix packages/react-data-grid/src/** packages/react-data-grid-addons/src/**"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/adazzle/react-data-grid.git"
   },
-  "keywords": [
-    "react",
-    "grid",
-    "react-component"
-  ],
+  "keywords": ["react", "grid", "react-component"],
   "peerDependencies": {
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
   "dependencies": {
     "classnames": "^1.2.0",
+    "create-react-class": "^15.5.3",
     "es5-shim": "^4.0.3",
     "fbjs": "^0.6.1",
     "fs-extra": "^0.30.0",
     "object-assign": "^2.0.0",
+    "prop-types": "^15.5.10",
     "react-contextmenu": "1.6.2",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
+    "react-input-autosize": "1.1.0",
     "react-select": "^1.0.0-beta14",
     "reselect": "^2.5.1",
-    "ron-react-autocomplete": "^4.0.2",
-    "react-input-autosize": "1.1.0"
+    "ron-react-autocomplete": "^4.0.2"
   },
   "devDependencies": {
     "avcoveralls": "^1.0.0",

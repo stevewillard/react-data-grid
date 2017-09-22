@@ -1,7 +1,8 @@
+const createClass = require('react-create-class');
 var RowsDescription = require('./RowsDescription')
 var ColsDescription = require('./ColsDescription')
 
-module.exports = React.createClass({
+module.exports = createClass({
 
   render : function(){
     return(
